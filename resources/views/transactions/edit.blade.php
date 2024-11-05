@@ -15,6 +15,9 @@
             @method('PUT')
             <div class="form-row">
                 <div class="col">
+                    <input type="date" name="tanggal" class="form-control" placeholder="{{ $transaction->tanggal }}" required>
+                </div>  
+                <div class="col">
                     <input type="text" name="description" class="form-control" value="{{ $transaction->description }}" required>
                 </div>
                 <div class="col">

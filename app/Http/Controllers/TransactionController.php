@@ -9,10 +9,16 @@ class TransactionController extends Controller
 {
     public function index()
     {
-        $transactions = Transaction::all(); // Fetch all transactions
-        $balance = $transactions->sum('amount'); // Calculate the balance
+    $transactions = Transaction::all(); // Fetch all transactions
 
-        return view('transactions.index', compact('transactions', 'balance'));
+    // Calculate total income and total expenses
+    $totalIncome = $transactions->where('type', 'income')->sum('amount');
+    $totalExpense = $transactions->where('type', 'expense')->sum('amount');
+
+    // Calculate balance as income - expense
+    $balance = $totalIncome - $totalExpense;
+
+    return view('transactions.index', compact('transactions', 'balance'));
     }
 
     public function create()

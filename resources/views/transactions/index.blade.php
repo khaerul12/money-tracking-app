@@ -30,6 +30,9 @@
             @csrf
             <div class="form-row">
                 <div class="col">
+                    <input type="date" name="tanggal" class="form-control" placeholder="Tanggal" required>
+                </div>
+                <div class="col">
                     <input type="text" name="description" class="form-control" placeholder="Description" required>
                 </div>
                 <div class="col">
@@ -53,6 +56,7 @@
         <table class="table table-striped">
             <thead>
                 <tr>
+                    <th>Tanggal</th>
                     <th>Description</th>
                     <th>Amount</th>
                     <th>Type</th>
@@ -62,6 +66,7 @@
             <tbody>
                 @foreach($transactions as $transaction)
                     <tr>
+                        <td>{{ $transaction->tanggal }}</td>
                         <td>{{ $transaction->description }}</td>
                         <td>{{ $transaction->amount }}</td>
                         <td>{{ ucfirst($transaction->type) }}</td>
