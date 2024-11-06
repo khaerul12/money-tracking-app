@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 
 class TransactionController extends Controller
 {
+    
     public function index()
     {
     $transactions = Transaction::all(); // Fetch all transactions
@@ -17,6 +18,7 @@ class TransactionController extends Controller
 
     // Calculate balance as income - expense
     $balance = $totalIncome - $totalExpense;
+    
 
     return view('transactions.index', compact('transactions', 'balance'));
     }
