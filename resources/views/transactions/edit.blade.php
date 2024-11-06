@@ -30,105 +30,35 @@
         }
     </style>
 </head>
-<body>
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
-        <a class="navbar-brand" href="#">Money Tracker</a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav ml-auto">
-                @if(Auth::check())
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">Logout</a>
-                        <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
-                            @csrf
-                        </form>
-                    </li>
-                @else
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ route('login') }}">Login</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ route('register') }}">Register</a>
-                    </li>
-                @endif
-            </ul>
-        </div>
-    </nav>
+<<body>
+    <div class="container mt-5">
+        <h1>Edit Transaction</h1>
 
-    <div class="container">
-        @if(session('success'))
-            <div class="alert alert-success">
-                {{ session('success') }}
-            </div>
-        @endif
-        @if(session('error'))
-            <div class="alert alert-danger">
-                {{ session('error') }}
-            </div>
-        @endif
-
-        <form action="/transactions" method="POST" class="mb-4">
+        <form action="{{ route('transactions.update', $transaction->id) }}" method="POST">
             @csrf
+            @method('PUT')
             <div class="form-row">
-                <div class="col-md-3 mb-2">
-                    <input type="date" name="tanggal" class="form-control" placeholder="Tanggal" required>
+                <div class="col">
+                    <input type="date" name="tanggal" class="form-control" placeholder="{{ $transaction->tanggal }}" required>
+                </div>  
+                <div class="col">
+                    <input type="text" name="description" class="form-control" value="{{ $transaction->description }}" required>
                 </div>
-                <div class="col-md-4 mb-2">
-                    <input type="text" name="description" class="form-control" placeholder="Description" required>
+                <div class="col">
+                    <input type="number" name="amount" class="form-control" value="{{ $transaction->amount }}" required>
                 </div>
-                <div class="col-md-2 mb-2">
-                    <input type="number" name="amount" class="form-control" placeholder="Amount" required>
-                </div>
-                <div class="col-md-2 mb-2">
+                <div class="col">
                     <select name="type" class="form-control" required>
-                        <option value="income">Income</option>
-                        <option value="expense">Expense</option>
+                        <option value="income" {{ $transaction->type == 'income' ? 'selected' : '' }}>Income</option>
+                        <option value="expense" {{ $transaction->type == 'expense' ? 'selected' : '' }}>Expense</option>
                     </select>
                 </div>
-                <div class="col-md-1 mb-2">
-                    <button type="submit" class="btn btn-primary btn-block">Add</button>
+                <div class="col">
+                    <button type="submit" class="btn btn-success">Update Transaction</button>
                 </div>
             </div>
         </form>
-
-        <h2 class="text-center">Balance: <span class="text-success">{{ $balance }}</span></h2>
-
-        <h3 class="mt-4">Transactions</h3>
-        <table class="table table-striped">
-            <thead>
-                <tr>
-                    <th>Tanggal</th>
-                    <th>Description</th>
-                    <th>Amount</th>
-                    <th>Type</th>
-                    <th>Actions</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach($transactions as $transaction)
-                    <tr>
-                        <td>{{ $transaction->tanggal }}</td>
-                        <td>{{ $transaction->description }}</td>
-                        <td>{{ $transaction->amount }}</td>
-                        <td>{{ ucfirst($transaction->type) }}</td>
-                        <td>
-                            <a href="{{ route('transactions.edit', $transaction->id) }}" class="btn btn-warning btn-sm">
-                                <i class="fas fa-edit"></i> Edit
-                            </a>
-                            <form action="{{ route('transactions.destroy', $transaction->id) }}" method="POST" style="display:inline;">
-                                @csrf
-                                @method('DELETE')
-                                <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to delete this transaction?')">
-                                    <i class="fas fa-trash-alt"></i> Delete
-                                </button>
-                            </form>
-                        </td>
-                    </tr>
-                @endforeach
-            </tbody>
-        </table>
     </div>
 </body>
+</html>
 </html>
