@@ -10,19 +10,26 @@ class TransactionController extends Controller
     
     public function index()
     {
-    $transactions = Transaction::all(); // Fetch all transactions
-
-    // Calculate total income and total expenses
-    $totalIncome = $transactions->where('type', 'income')->sum('amount');
-    $totalExpense = $transactions->where('type', 'expense')->sum('amount');
-
-    // Calculate balance as income - expense
-    $balance = $totalIncome - $totalExpense;
+        // Check if the user is authenticated
+        if (auth()->check()) {
+            // Fetch transactions for the logged-in user
+            $transactions = auth()->user()->transactions; 
     
-
-    return view('transactions.index', compact('transactions', 'balance'));
+            // Calculate total income and total expenses
+            $totalIncome = $transactions->where('type', 'income')->sum('amount');
+            $totalExpense = $transactions->where('type', 'expense')->sum('amount');
+    
+            // Calculate balance as income - expense
+            $balance = $totalIncome - $totalExpense;
+        } else {
+            // If not authenticated, set transactions and balance to empty or zero
+            $transactions = collect(); // Empty collection
+            $balance = 0;
+        }
+    
+        // Return the view from the transactions subdirectory
+        return view('transactions.index', compact('transactions', 'balance'));
     }
-
     public function create()
     {
         // This method can be used to show a form for creating a new transaction
@@ -35,9 +42,12 @@ class TransactionController extends Controller
             'amount' => 'required|numeric',
             'type' => 'required|in:income,expense',
         ]);
-
-        Transaction::create($request->all());
-
+    
+        // Create a new transaction and associate it with the authenticated user
+        $transaction = new Transaction($request->all());
+        $transaction->user_id = auth()->id(); // Set the user_id to the authenticated user's ID
+        $transaction->save(); // Save the transaction
+    
         return redirect()->route('transactions.index')->with('success', 'Transaction added successfully!');
     }
 

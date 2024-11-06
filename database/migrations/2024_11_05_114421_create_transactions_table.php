@@ -13,8 +13,9 @@ return new class extends Migration
     {
         Schema::create('transactions', function (Blueprint $table) {
             $table->id();
-            $table->string('description');
+            $table->foreignId('user_id')->constrained()->onDelete('cascade'); // Ensure user_id is included
             $table->date('tanggal');
+            $table->string('description');
             $table->decimal('amount', 10, 2);
             $table->enum('type', ['income', 'expense']);
             $table->timestamps();

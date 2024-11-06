@@ -11,7 +11,12 @@ class User extends Authenticatable
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasFactory, Notifiable;
+// In App\Models\User.php
 
+    public function transactions()
+    {
+        return $this->hasMany(Transaction::class);
+    }
     /**
      * The attributes that are mass assignable.
      *
