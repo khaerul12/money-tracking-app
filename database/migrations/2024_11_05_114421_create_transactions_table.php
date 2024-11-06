@@ -12,7 +12,6 @@ return new class extends Migration
     public function up()
     {
         Schema::create('transactions', function (Blueprint $table) {
-            $table->id('user_id');
             $table->id();
             $table->string('description');
             $table->date('tanggal');
